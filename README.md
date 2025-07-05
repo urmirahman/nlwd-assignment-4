@@ -184,15 +184,10 @@ Queries/mutations automatically manage cache and tags.
 
 ## 🤝 Contributing
 
-1. Fork the repo
+1. Fork the repo if you want
 2. Create a feature branch (`git checkout -b feature/foo`)
 3. Commit your changes (`git commit -m "feat: add bar"`)
 4. Push to branch (`git push origin feature/foo`)
 5. Open a Pull Request
 
 ---
-
-## 📜 License
-
-MIT © Your Name  
-Feel free to customize or extend!
