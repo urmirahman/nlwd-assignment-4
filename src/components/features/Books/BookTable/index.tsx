@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import type { Book } from '../../../../_redux/api/booksApi';
 
 interface BookTableProps {
-  books: any[];
+  books: Book[];
   borrowedIds: string[];
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
-  onBorrow: (book: any) => void;
+  onBorrow: (book: Book) => void;
 }
 
 const BookTable: React.FC<BookTableProps> = ({
