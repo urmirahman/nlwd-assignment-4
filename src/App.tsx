@@ -3,10 +3,12 @@ import BookList from './pages/BookList';
 import AddBook from './pages/AddBook';
 import EditBook from './pages/EditBook';
 import BorrowedBooks from './pages/BorrowedBook';
+import Navbar from './components/features/Navbar';
 
 function App() {
   return (
     <div className='App'>
+      <Navbar />
       <Routes>
         <Route path='/' element={<Navigate to='/books' replace />} />
         <Route path='/books' element={<BookList />} />
