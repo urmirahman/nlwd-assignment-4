@@ -6,35 +6,63 @@ const BorrowSummary: React.FC = () => {
   const summary = res?.data || [];
 
   if (isLoading) {
-    return <div className='p-4 text-center'>Loading borrow summary...</div>;
+    return (
+      <div className='flex items-center justify-center py-12'>
+        <div
+          className='w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin'
+          aria-label='Loading…'
+        />
+      </div>
+    );
   }
 
   if (error) {
     return (
-      <div className='p-4 text-center text-red-500'>
+      <div className='p-6 text-center text-red-600'>
         Failed to load borrow summary.
       </div>
     );
   }
 
-  return (
-    <div className='p-6 bg-white'>
-      <h2 className='text-2xl font-bold mb-4'>📚 Borrow Summary</h2>
+  if (summary.length === 0) {
+    return (
+      <div className='p-6 text-center text-gray-500'>
+        No borrow history available.
+      </div>
+    );
+  }
 
-      <table className='min-w-full border border-gray-300 rounded'>
+  return (
+    <div className='p-6 bg-white rounded-lg shadow-md overflow-x-auto'>
+      <h2 className='text-2xl font-bold mb-4'>📊 Borrow Summary</h2>
+
+      <table className='min-w-full divide-y divide-gray-200'>
         <thead className='bg-gray-100'>
           <tr>
-            <th className='text-left py-2 px-4 border-b'>Title</th>
-            <th className='text-left py-2 px-4 border-b'>ISBN</th>
-            <th className='text-left py-2 px-4 border-b'>Total Quantity</th>
+            {['Title', 'ISBN', 'Total Quantity'].map((h) => (
+              <th
+                key={h}
+                className='px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider'
+              >
+                {h}
+              </th>
+            ))}
           </tr>
         </thead>
-        <tbody>
+
+        <tbody className='divide-y divide-gray-200'>
           {summary.map((item) => (
-            <tr key={item._id} className='border-b hover:bg-gray-50'>
-              <td className='py-2 px-4'>{item.book.title}</td>
-              <td className='py-2 px-4'>{item.book.isbn}</td>
-              <td className='py-2 px-4 font-semibold text-center'>
+            <tr
+              key={item._id}
+              className='odd:bg-white even:bg-gray-50 hover:bg-gray-100 transition'
+            >
+              <td className='px-6 py-4 whitespace-nowrap text-gray-800'>
+                {item.book.title}
+              </td>
+              <td className='px-6 py-4 whitespace-nowrap text-gray-800'>
+                {item.book.isbn}
+              </td>
+              <td className='px-6 py-4 whitespace-nowrap text-center font-semibold text-gray-900'>
                 {item.totalQuantity}
               </td>
             </tr>

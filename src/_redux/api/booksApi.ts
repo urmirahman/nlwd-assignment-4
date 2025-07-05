@@ -1,17 +1,20 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export interface Book {
-  id: number;
+  _id: string;
   title: string;
   author: string;
   genre: string;
+  copies: number;
   description?: string;
   isbn?: number;
 }
 
 export const booksApi = createApi({
   reducerPath: 'booksApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8000/api' }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: import.meta.env.VITE_BASE_URL,
+  }),
   tagTypes: ['Books'],
   endpoints: (builder) => ({
     getBooks: builder.query<Book[], void>({
