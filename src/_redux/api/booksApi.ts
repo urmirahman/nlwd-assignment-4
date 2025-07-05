@@ -17,12 +17,12 @@ export const booksApi = createApi({
   }),
   tagTypes: ['Books'],
   endpoints: (builder) => ({
-    getBooks: builder.query<Book[], void>({
+    getBooks: builder.query<{ data: Book[] }, void>({
       query: () => '/books',
       providesTags: ['Books'],
     }),
 
-    getBook: builder.query<Book, string>({
+    getBook: builder.query<{ data: Book }, string>({
       query: (id) => `/books/${id}`,
       providesTags: ['Books'],
     }),
