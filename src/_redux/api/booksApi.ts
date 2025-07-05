@@ -4,7 +4,9 @@ export interface Book {
   id: number;
   title: string;
   author: string;
-  year?: number;
+  genre: string;
+  description?: string;
+  isbn?: number;
 }
 
 export const booksApi = createApi({
@@ -17,21 +19,21 @@ export const booksApi = createApi({
       providesTags: ['Books'],
     }),
 
-    getBook: builder.query<Book, number>({
+    getBook: builder.query<Book, string>({
       query: (id) => `/books/${id}`,
       providesTags: ['Books'],
     }),
 
     addBook: builder.mutation<Book, Partial<Book>>({
       query: (newBook) => ({
-        url: '/books',
+        url: '/books/create',
         method: 'POST',
         body: newBook,
       }),
       invalidatesTags: ['Books'],
     }),
 
-    updateBook: builder.mutation<Book, { id: number; data: Partial<Book> }>({
+    updateBook: builder.mutation<Book, { id: string; data: Partial<Book> }>({
       query: ({ id, data }) => ({
         url: `/books/${id}`,
         method: 'PUT',
@@ -40,12 +42,41 @@ export const booksApi = createApi({
       invalidatesTags: ['Books'],
     }),
 
-    deleteBook: builder.mutation<void, number>({
+    deleteBook: builder.mutation<void, string>({
       query: (id) => ({
         url: `/books/${id}`,
         method: 'DELETE',
       }),
+
       invalidatesTags: ['Books'],
+    }),
+    borrowBook: builder.mutation<
+      { success: boolean; message: string },
+      { book: string; quantity: number; dueDate: string }
+    >({
+      query: ({ book, quantity, dueDate }) => ({
+        url: `/borrow/book`,
+        method: 'POST',
+        body: { book, quantity, dueDate },
+      }),
+      invalidatesTags: ['Books'],
+    }),
+    getBorrowSummary: builder.query<
+      {
+        success: boolean;
+        message: string;
+        data: {
+          _id: string;
+          totalQuantity: number;
+          book: {
+            title: string;
+            isbn: string;
+          };
+        }[];
+      },
+      void
+    >({
+      query: () => '/borrow',
     }),
   }),
 });
@@ -53,7 +84,9 @@ export const booksApi = createApi({
 export const {
   useGetBooksQuery,
   useGetBookQuery,
+  useGetBorrowSummaryQuery,
   useAddBookMutation,
   useUpdateBookMutation,
   useDeleteBookMutation,
+  useBorrowBookMutation,
 } = booksApi;

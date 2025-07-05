@@ -5,20 +5,21 @@ import { useGetBookQuery, useUpdateBookMutation } from '../_redux/api/booksApi';
 const EditBook: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const bookId = id ? parseInt(id) : 0;
+  const bookId = id ? id : '0';
 
-  const { data: book, isLoading } = useGetBookQuery(bookId, { skip: !bookId });
+  const { data: res, isLoading } = useGetBookQuery(bookId, { skip: !bookId });
+  const book = res?.data;
   const [updateBook, { isLoading: isSaving }] = useUpdateBookMutation();
 
   const [title, setTitle] = useState('');
   const [author, setAuthor] = useState('');
-  const [year, setYear] = useState('');
+  const [isbn, setisbn] = useState('');
 
   useEffect(() => {
     if (book) {
       setTitle(book.title);
       setAuthor(book.author);
-      setYear(book.year?.toString() || '');
+      setisbn(book.isbn?.toString() || '');
     }
   }, [book]);
 
@@ -28,7 +29,7 @@ const EditBook: React.FC = () => {
     try {
       await updateBook({
         id: bookId,
-        data: { title, author, year: year ? Number(year) : undefined },
+        data: { title, author, isbn: isbn ? Number(isbn) : undefined },
       }).unwrap();
       navigate('/books');
     } catch (err) {
@@ -68,12 +69,12 @@ const EditBook: React.FC = () => {
           />
         </div>
         <div className='mb-4'>
-          <label className='block font-medium mb-1'>Year</label>
+          <label className='block font-medium mb-1'>isbn</label>
           <input
             type='number'
             className='w-full border border-gray-300 rounded px-3 py-2'
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
+            value={isbn}
+            onChange={(e) => setisbn(e.target.value)}
           />
         </div>
         <button

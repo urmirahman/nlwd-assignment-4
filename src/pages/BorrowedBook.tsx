@@ -1,58 +1,48 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { useGetBooksQuery } from '../_redux/api/booksApi';
-import { returnBook } from '../_redux/slices/borrowSlice';
-import { type RootState } from '../_redux/store';
+import { useGetBorrowSummaryQuery } from '../_redux/api/booksApi';
 
-const BorrowedBooks: React.FC = () => {
-  const dispatch = useDispatch();
-  const borrowedIds = useSelector(
-    (state: RootState) => state.borrow.borrowedIds,
-  );
-  const { data: books, isLoading } = useGetBooksQuery();
+const BorrowSummary: React.FC = () => {
+  const { data: res, isLoading, error } = useGetBorrowSummaryQuery();
+  const summary = res?.data || [];
 
   if (isLoading) {
-    return <div className='p-4 text-center'>Loading borrowed books...</div>;
+    return <div className='p-4 text-center'>Loading borrow summary...</div>;
   }
 
-  const borrowedBooks =
-    books?.filter((book) => borrowedIds.includes(book.id)) || [];
+  if (error) {
+    return (
+      <div className='p-4 text-center text-red-500'>
+        Failed to load borrow summary.
+      </div>
+    );
+  }
 
   return (
-    <div className='p-6 max-w-lg mx-auto'>
-      <h2 className='text-2xl font-bold mb-4'>Borrowed Books</h2>
-      {borrowedBooks.length === 0 ? (
-        <p>No books borrowed yet.</p>
-      ) : (
-        <ul>
-          {borrowedBooks.map((book) => (
-            <li
-              key={book.id}
-              className='flex justify-between items-center border-b py-2'
-            >
-              <div>
-                <span className='font-medium'>{book.title}</span> by{' '}
-                {book.author} {book.year && `(${book.year})`}
-              </div>
-              <button
-                onClick={() => dispatch(returnBook(book.id))}
-                className='text-blue-600 hover:underline'
-              >
-                Return
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className='p-6 bg-white'>
+      <h2 className='text-2xl font-bold mb-4'>📚 Borrow Summary</h2>
 
-      <div className='mt-4'>
-        <Link to='/books' className='text-gray-700 hover:underline'>
-          &larr; Back to Library
-        </Link>
-      </div>
+      <table className='min-w-full border border-gray-300 rounded'>
+        <thead className='bg-gray-100'>
+          <tr>
+            <th className='text-left py-2 px-4 border-b'>Title</th>
+            <th className='text-left py-2 px-4 border-b'>ISBN</th>
+            <th className='text-left py-2 px-4 border-b'>Total Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          {summary.map((item) => (
+            <tr key={item._id} className='border-b hover:bg-gray-50'>
+              <td className='py-2 px-4'>{item.book.title}</td>
+              <td className='py-2 px-4'>{item.book.isbn}</td>
+              <td className='py-2 px-4 font-semibold text-center'>
+                {item.totalQuantity}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
 
-export default BorrowedBooks;
+export default BorrowSummary;
