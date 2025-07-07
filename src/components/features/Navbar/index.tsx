@@ -33,7 +33,6 @@ const Navbar: React.FC = () => {
             </Link>
           </div>
 
-          {/* Mobile Toggle Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className='md:hidden text-gray-700 hover:text-blue-600 focus:outline-none'
