@@ -28,7 +28,7 @@ const Navbar: React.FC = () => {
             <Link to='/books/new' className={linkClass('/books/new')}>
               Add Book
             </Link>
-            <Link to='/borrow-summary' className={linkClass('/borrow-summary')}>
+            <Link to='/borrowed' className={linkClass('/borrowed')}>
               Borrow History
             </Link>
           </div>
