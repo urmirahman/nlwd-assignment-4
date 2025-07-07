@@ -8,14 +8,12 @@ const Footer: React.FC = () => (
         Built with React, Redux Toolkit, RTK Query & Tailwind CSS.
       </p>
       <p className='mt-2 md:mt-0'>
-        Images via{' '}
+        Build by{' '}
         <a
-          href='https://unsplash.com'
-          target='_blank'
-          rel='noopener noreferrer'
-          className='underline hover:text-white'
+          href='https://urmirahman.vercel.app/'
+          className='text-blue-400 hover:underline'
         >
-          Unsplash
+          Urmi Rahman
         </a>
       </p>
     </div>
