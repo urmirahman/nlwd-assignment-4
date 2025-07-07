@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { HiMenu, HiX } from 'react-icons/hi';
 
 const Navbar: React.FC = () => {
   const { pathname } = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
 
   const linkClass = (path: string) =>
-    `px-3 py-2 rounded-md font-medium transition ${
+    `block px-4 py-2 rounded-md font-medium transition ${
       pathname === path
         ? 'bg-blue-600 text-white'
         : 'text-gray-700 hover:bg-blue-100'
@@ -26,12 +28,46 @@ const Navbar: React.FC = () => {
             <Link to='/books/new' className={linkClass('/books/new')}>
               Add Book
             </Link>
-            <Link to='/borrowed' className={linkClass('/borrow-summary')}>
+            <Link to='/borrow-summary' className={linkClass('/borrow-summary')}>
               Borrow History
             </Link>
           </div>
+
+          {/* Mobile Toggle Button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className='md:hidden text-gray-700 hover:text-blue-600 focus:outline-none'
+          >
+            {isOpen ? <HiX size={28} /> : <HiMenu size={28} />}
+          </button>
         </div>
       </div>
+
+      {isOpen && (
+        <div className='md:hidden px-4 pb-4'>
+          <Link
+            to='/books'
+            className={linkClass('/books')}
+            onClick={() => setIsOpen(false)}
+          >
+            All Books
+          </Link>
+          <Link
+            to='/books/new'
+            className={linkClass('/books/new')}
+            onClick={() => setIsOpen(false)}
+          >
+            Add Book
+          </Link>
+          <Link
+            to='/borrow-summary'
+            className={linkClass('/borrow-summary')}
+            onClick={() => setIsOpen(false)}
+          >
+            Borrow History
+          </Link>
+        </div>
+      )}
     </nav>
   );
 };
